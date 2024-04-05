@@ -1,0 +1,23 @@
+Drupal.behaviors.stickyIcon = {
+  attach: (context) => {
+    const $bar = $('#sticky-icon');
+    if (!$bar.length) { return; }
+    const $barParent = $bar.parent();
+    const $navMenu = $('.region-header').eq(0);
+    const $navUtilityMenu = $('.region-header-top').eq(0);
+    function stickyElem() {
+      const menuHeight = $navMenu.outerHeight();
+      const utilityMenuHeight = $navUtilityMenu.outerHeight();
+      const scrollTop = $(window).scrollTop();
+      const screenWidth = $(window).width();
+      const threshold = (screenWidth > 1024) ? utilityMenuHeight + menuHeight : menuHeight;
+      const barParentPos = $barParent.offset();
+      if (barParentPos.top < (scrollTop + threshold)) {
+        $bar.addClass('fixedOn');
+      } else {
+        $bar.removeClass('fixedOn');
+      }
+    }
+    $(window, context).on('scroll resize', stickyElem);
+  },
+};
