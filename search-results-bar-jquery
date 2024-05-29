@@ -1,0 +1,20 @@
+import $ from 'jquery';
+
+Drupal.behaviors.studyHallSearchResults = {
+  attached: false, // Flag to track if the behavior is attached
+  attach: (context) => {
+    if (Drupal.behaviors.studyHallSearchResults.attached) {
+      return; // Already attached, so do nothing
+    }
+    const $studyHallSearchContainer = $(context).hasClass('view-id-study_hall_search') ? context : $(context).find('.view-id-study_hall_search');
+    if (!$studyHallSearchContainer.length) return;
+    const urlParams = new URLSearchParams(window.location.search);
+    const studyHallSearch = urlParams.get('study-hall-search');
+    const $viewContent = $studyHallSearchContainer.find('.view-content');
+    if (studyHallSearch && $viewContent.length) {
+      const $newNode = $('<div>', { id: 'search-results' }).html('Search Results for: <span> "' + studyHallSearch + '"</span>');
+      $newNode.insertBefore($viewContent);
+    }
+    Drupal.behaviors.studyHallSearchResults.attached = true;
+  },
+};
